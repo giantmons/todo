@@ -1,8 +1,8 @@
 import { getTasks } from "@/services/taskService";
 import { useEffect, useState } from "react";
 
-export const useGetTask = () => {
-    const [userTask, setUserTask] = useState([]);
+export const useGetTask = (refreshTrigger: boolean) => {
+    const [userTask, setUserTask] = useState<task[]>([]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -22,7 +22,7 @@ export const useGetTask = () => {
         };
 
         fetchData();
-    }, []);
+    }, [refreshTrigger]);
 
     return userTask;
 };
