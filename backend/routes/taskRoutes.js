@@ -9,18 +9,32 @@ const router = express.Router();
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const { title, description } = req.body;
-    const task = new Task({ title, description, user: new mongoose.Types.ObjectId(req.user.Id) });
+    
+    console.log("Extracted User ID from Token:", req.user.userId); // Debug User ID
+
+    if (!req.user.userId) {
+      return res.status(401).json({ success: false, message: "Unauthorized: No user ID found." });
+    }
+
+    const task = new Task({
+      title,
+      description,
+      user: new mongoose.Types.ObjectId(req.user.userId) // Ensure correct ID
+    });
+
     await task.save();
-    res.status(201).json(task);
+    res.status(201).json({ success: true, task });
+
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
+
 
 // ✅ Get All Tasks for Logged-in User
 router.get("/", authMiddleware, async (req, res) => {
   try {
-    const tasks = await Task.find({ user: new mongoose.Types.ObjectId(req.user.Id) });
+    const tasks = await Task.find({ user: new mongoose.Types.ObjectId(req.user.userId) });
     res.json(tasks);
   } catch (err) {
     res.status(500).json({ error: err.message });
