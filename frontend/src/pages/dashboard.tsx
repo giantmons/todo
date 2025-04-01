@@ -7,8 +7,8 @@ import { useState } from "react";
 export default function Dashboard() {
     const [refreshTrigger, setRefreshTrigger] = useState(false);
     const tasks = useGetTask(refreshTrigger);
-    const {handleDelete, messageDelete} = useDeleteTask()
-    const {handleMarkTaskComplete} = useMarkTaskComplete();
+    const { handleDelete, messageDelete } = useDeleteTask()
+    const { handleMarkTaskComplete } = useMarkTaskComplete();
     const { addNewTask, message } = useAddTask();
 
     const [formData, setFormData] = useState({
@@ -38,6 +38,7 @@ export default function Dashboard() {
 
     return (
         <>
+        <div className="font-poppins">
             <form onSubmit={handleSubmit}>
                 <input type="text" name="title" placeholder="Title" onChange={handleChange} required />
                 <input type="text" name="description" placeholder="Description" onChange={handleChange} required />
@@ -55,7 +56,12 @@ export default function Dashboard() {
                                 <p>{task.description}</p>
                                 <p>{task.completed ? "completed" : "Incomplete"}</p>
                                 <button onClick={() => handleDeleteClick(task._id)}>Delete</button>
+                                {task.completed ? 
+                                <button disabled={true}>Marked as done</button> : 
                                 <button onClick={() => handleMarkTaskCompleteClick(task._id)}>Mark as Done</button>
+                                }
+
+
                                 {/* {messageDelete && <p>Deleted Successfully</p>} */}
                             </li>
                         ))
@@ -64,6 +70,8 @@ export default function Dashboard() {
                     )}
                 </ul>
             </div>
+        </div>
+
         </>
     );
 }
