@@ -25,7 +25,7 @@ export default function Dashboard() {
         description: ""
     });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
@@ -62,8 +62,8 @@ export default function Dashboard() {
                                 <DialogDescription>
                                     <form onSubmit={handleSubmit} className="flex flex-col gap-3">
                                         <input type="text" name="title" placeholder="Title" onChange={handleChange} required className="p-2 border rounded-sm border-gray-300" />
-                                        <input type="text" name="description" placeholder="Description" onChange={handleChange} required className="p-2 border rounded-sm border-gray-300" />
-                                        <button type="submit">Submit</button>
+                                        <textarea name="description" placeholder="Description" onChange={handleChange} required className="p-2 h-26 border rounded-sm border-gray-300" />
+                                        <button type="submit" className="font-poppins text-white rounded-xl bg-black p-3 hover:scale-95 transition cursor-pointer">Submit</button>
                                     </form>
                                 </DialogDescription>
                             </DialogHeader>
