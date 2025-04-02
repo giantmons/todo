@@ -15,7 +15,7 @@ export const useDeleteTask = () => {
                 setMessage("Task successfully deleted!");
                 console.log("Task Successfully deleted", response);
                 // Optionally, refresh the tasks or update state to reflect the deletion
-                window.location.reload(); // or update state to remove the deleted task
+                
             } else {
                 setMessage(`Failed to delete task: ${response.error}`);
                 console.error("Failed to delete task:", response.error);
