@@ -44,7 +44,7 @@ export default function LoginPage() {
     }
 
     return <>
-        <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+        <div className="flex min-h-svh w-full items-center justify-center p-6 md:p-10 font-poppins">
             <div className="w-full max-w-sm">
                 <div className="flex flex-col gap-6">
                     <Card>
@@ -80,7 +80,7 @@ export default function LoginPage() {
                                         </div>
                                         <Input id="password" name="password" type="password" onChange={handleChange} required />
                                     </div>
-                                    <Button type="submit" className="w-full">
+                                    <Button type="submit" className="w-full bg-black text-white cursor-pointer">
                                         Login
                                     </Button>
                                     {message && <p className="text-sm text-center mt-2">{message}</p>}

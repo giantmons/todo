@@ -61,15 +61,16 @@ export const deleteTask = async (taskId: string, access: string) => {
     }
 }
 
-export const markTaskComplete = async (taskId: string, access: string) => {
+export const toggleTaskComplete = async (taskId: string, access: string) => {
     try {
         // Send an empty body since the task is being updated to completed
         const response = await axios.patch(
-            `${LOCALSERVER}/tasks/${taskId}/complete`,  // URL for the API
+            `${LOCALSERVER}/tasks/${taskId}/toggle-complete`,  // URL for the API
             {},  // Empty body
             {
                 headers: {
                     "Authorization": `Bearer ${access}`, // Pass the token as Authorization header
+                    "Content-Type" : "application/json"
                 },
             }
         );
@@ -77,5 +78,25 @@ export const markTaskComplete = async (taskId: string, access: string) => {
     } catch (error) {
         console.error("Error marking as done", error);  // Log the error if any
         throw error;  // Rethrow the error to handle it on the caller side
+    }
+};
+
+
+export const updateTaskPriority = async (taskId: string, priority: string, access: string) => {
+    try {
+        const response = await axios.patch(
+            `${LOCALSERVER}/tasks/${taskId}/priority`,
+            { priority },
+            {
+                headers: {
+                    "Authorization": `Bearer ${access}`,
+                    "Content-Type": "application/json"
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error updating task priority:", error);
+        return null;
     }
 };
