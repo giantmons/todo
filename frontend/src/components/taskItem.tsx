@@ -70,10 +70,9 @@ export default function TaskItem({ task, onTaskUpdated }: TaskItemProps) {
                         <CheckCircle2Icon />
                     </div>
                 </button>
-                <h3 className={`${isCompleted ? "line-through" : ""}`}>{task.title}</h3>
-                {/* <p className={`${isCompleted ? "line-through" : ""}`}>{task.description}</p> */}
+                <h3 className={`text-xs xl:text-sm ${isCompleted ? "line-through" : ""}`}>{task.title}</h3>
                 {task.description &&
-                    <Badge variant={"hashtag"}> <span className="text-[#2f2b43]"># {task.description}</span></Badge>
+                    <Badge variant={"hashtag"}> <span className="text-[#2f2b43] text-xs"># {task.description}</span></Badge>
                 }
             </div>
 
