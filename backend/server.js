@@ -2,21 +2,20 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const authRoutes = require("./routes/authRoutes"); //import authentication routes (authRoutes.js)
+
+const authRoutes = require("./routes/authRoutes");
 const taskRoutes = require("./routes/taskRoutes");
 const userRoutes = require("./routes/userRoutes");
 
-dotenv.config(); //load environment variables from .env file
+dotenv.config();
 
 const app = express();
-app.options('*', cors()); // Handle preflight requests for all routes
-app.use(express.json()); //parse incoming JSON body parsing
-app.use(express.urlencoded({ extended: true })); // (Optional) Handle form data
-app.use("/api/auth", authRoutes) //Use authentication routes
-app.use("/api/tasks", taskRoutes); //Use task routes
-app.use("/api/user", userRoutes) //Use user routes
 
-const allowedOrigins = ['http://localhost:5173', 'https://todo-orcin-nine-81.vercel.app'];
+// ✅ Correct CORS setup BEFORE routes
+const allowedOrigins = [
+    'http://localhost:5173',
+    'https://todo-orcin-nine-81.vercel.app'
+];
 
 app.use(cors({
     origin: function (origin, callback) {
@@ -29,13 +28,28 @@ app.use(cors({
     credentials: true
 }));
 
-app.get("/", (req, res) => { //route that listens for GET requests
-    res.send("API is running...")
-})
+// ✅ Handle preflight requests
+app.options('*', cors());
 
-mongoose.connect(process.env.MONGO_URI)  //Connects to MongoDB using the connection stored in .env
+// Middlewares
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/tasks", taskRoutes);
+app.use("/api/user", userRoutes);
+
+// Root test route
+app.get("/", (req, res) => {
+    res.send("API is running...");
+});
+
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log("MongoDB Connected"))
     .catch(err => console.log(err));
 
+// Start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server is running on port http://localhost:${PORT}`))
+app.listen(PORT, () => console.log(`Server is running on port http://localhost:${PORT}`));
