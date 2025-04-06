@@ -1,7 +1,7 @@
 import axios from "axios";
 
 
-const LOCALSERVER = "http://localhost:5003/api"
+const LOCALSERVER = "https://todo-jnyl.onrender.com/api"
 
 export const registerUser = async (username: string, email: string, password: string) => {
     try {
