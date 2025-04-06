@@ -8,7 +8,7 @@ const router = express.Router();
 // ✅ Create a New Task
 router.post("/", authMiddleware, async (req, res) => {
   try {
-    const { title, description } = req.body;
+    const { title, description, priority } = req.body;
     
     console.log("Extracted User ID from Token:", req.user.userId); // Debug User ID
 
@@ -19,6 +19,7 @@ router.post("/", authMiddleware, async (req, res) => {
     const task = new Task({
       title,
       description,
+      priority: priority || "Medium",
       user: new mongoose.Types.ObjectId(req.user.userId) // Ensure correct ID
     });
 
@@ -41,29 +42,73 @@ router.get("/", authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ Update a Task
-router.put("/:id", authMiddleware, async (req, res) => {
+// ✅ DELETE a Task
+router.delete("/:id", authMiddleware, async (req, res) => {
   try {
-    const { title, description, completed } = req.body;
-    const task = await Task.findByIdAndUpdate(
-      req.params.id,
-      { title, description, completed },
-      { new: true }
-    );
-    res.json(task);
+    const { id } = req.params;
+    const userId = req.user.userId; // Extracted from JWT
+
+    // Find the task and ensure it belongs to the logged-in user
+    const task = await Task.findOneAndDelete({ _id: id, user: userId });
+
+    if (!task) {
+      return res.status(404).json({ success: false, message: "Task not found" });
+    }
+
+    res.json({ success: true, message: "Task deleted successfully" });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ success: false, error: err.message });
   }
 });
 
-// ✅ Delete a Task
-router.delete("/:id", authMiddleware, async (req, res) => {
+// ✅ Toggle Task Completion
+router.patch("/:id/toggle-complete", authMiddleware, async (req, res) => {
   try {
-    await Task.findByIdAndDelete(req.params.id);
-    res.json({ message: "Task deleted successfully" });
+      const { id } = req.params;
+      const userId = req.user.userId;
+
+      // Find the task that belongs to the user
+      const task = await Task.findOne({ _id: id, user: userId });
+
+      if (!task) {
+          return res.status(404).json({ success: false, message: "Task not found" });
+      }
+
+      // Toggle completed status
+      task.completed = !task.completed;
+      await task.save();
+
+      res.json({ success: true, message: "Task updated successfully", completed: task.completed });
   } catch (err) {
-    res.status(500).json({ error: err.message });
+      res.status(500).json({ success: false, error: err.message });
   }
 });
+
+
+router.patch("/:taskId/priority", authMiddleware, async (req, res) => {
+  try {
+      const { priority } = req.body;
+      const task = await Task.findById(req.params.taskId);
+
+      if (!task) {
+          return res.status(404).json({ error: "Task not found" });
+      }
+
+      if (!["High", "Medium", "Low"].includes(priority)) {
+          return res.status(400).json({ error: "Invalid priority value" });
+      }
+
+      task.priority = priority;
+      await task.save();
+
+      res.json(task);
+  } catch (error) {
+      res.status(500).json({ error: "Error updating task priority" });
+  }
+});
+
+
+
+
 
 module.exports = router;
