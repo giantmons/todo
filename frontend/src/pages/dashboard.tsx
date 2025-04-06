@@ -6,7 +6,6 @@ import {
   DialogHeader,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAddTask } from "@/hooks/dashboard/useAddTask";
 import { useGetTask } from "@/hooks/dashboard/useGetTask";
 import { useUserInfo } from "@/hooks/dashboard/useUserInfo";
@@ -89,7 +88,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="font-poppins bg-[#f4f4f4] h-screen overflow-hidden">
+    <div className="font-poppins bg-[#f4f4f4] h-screen lg:overflow-y-auto">
       <Toaster richColors closeButton />
 
 
@@ -182,7 +181,7 @@ export default function Dashboard() {
             </Select>
           </div>
 
-          <ScrollArea className="h-[500px] w-full overflow-y-auto">
+          {/* <ScrollArea className="h-[500px] w-full overflow-y-auto"> */}
             <AnimatePresence>
               {filteredTasks.length > 0 ? (
                 filteredTasks.slice().reverse().map((task) => (
@@ -200,7 +199,7 @@ export default function Dashboard() {
                 <p>No tasks found</p>
               )}
             </AnimatePresence>
-          </ScrollArea>
+          {/* </ScrollArea> */}
         </div>
       </div>
     </div>
