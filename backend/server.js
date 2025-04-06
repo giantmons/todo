@@ -9,6 +9,7 @@ const userRoutes = require("./routes/userRoutes");
 dotenv.config(); //load environment variables from .env file
 
 const app = express();
+app.options('*', cors()); // Handle preflight requests for all routes
 app.use(express.json()); //parse incoming JSON body parsing
 app.use(express.urlencoded({ extended: true })); // (Optional) Handle form data
 app.use("/api/auth", authRoutes) //Use authentication routes
