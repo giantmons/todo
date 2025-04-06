@@ -21,6 +21,8 @@ const badgeVariants = cva(
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground bg-orange-500 text-white",
         high:
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground bg-red-500 text-white",
+        hashtag:
+          "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground bg-gray-200 text-white",
       },
     },
     defaultVariants: {

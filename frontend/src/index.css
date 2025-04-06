@@ -6,4 +6,8 @@
     --font-poppins: "Poppins", sans-serif;
 }
 
+.custom-dashed {
+    border-image: repeating-linear-gradient(40deg, #afafaf 0%, #afafaf 10%, transparent 10%, transparent 11%) 1;
+}
+  
 

@@ -4,7 +4,7 @@ import { useState } from "react";
 export const useAddTask = () => {
     const [message, setMessage] = useState("");
 
-    const addNewTask = async (e: React.FormEvent<HTMLFormElement>, formData: { title: string; description: string }) => {
+    const addNewTask = async (e: React.FormEvent<HTMLFormElement>, formData: { title: string; description: string, priority: string }) => {
         e.preventDefault();
         setMessage("");
 
@@ -15,8 +15,10 @@ export const useAddTask = () => {
                 return;
             }
 
-            const { title, description } = formData;
-            const data = await addTask(title, description, access);
+            const { title, description, priority } = formData;
+            console.log("FORM DATA", formData)
+            const data = await addTask(title, description, priority ,access);
+            console.log("DATA SENT:", data)
 
             if (data?.success) {
                 setMessage("Task is saved!");

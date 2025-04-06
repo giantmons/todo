@@ -24,13 +24,14 @@ export const getTasks = async (access: string): Promise<any> => {
 
 
 //ADD TASK
-export const addTask = async (title: string, description: string, access: string) => {
+export const addTask = async (title: string, description: string, priority: string ,access: string) => {
     try {
         const response = await axios.post(
             `${LOCALSERVER}/tasks/`,
             {
                 title,
-                description
+                description,
+                priority
             },
             {
                headers: {
