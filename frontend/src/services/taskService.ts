@@ -1,7 +1,7 @@
 import axios from "axios";
 
-const LOCALSERVER = "https://todo-jnyl.onrender.com/api";
-
+/* const LOCALSERVER = "https://todo-jnyl.onrender.com/api"; */
+const LOCALSERVER = "http://localhost:5003/api"
 
 //GET USER TASK
 export const getTasks = async (access: string): Promise<any> => {
