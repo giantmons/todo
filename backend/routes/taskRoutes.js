@@ -5,7 +5,7 @@ const { default: mongoose } = require("mongoose");
 
 const router = express.Router();
 
-// ✅ Create a New Task
+// Create a New Task
 router.post("/", authMiddleware, async (req, res) => {
   try {
     const { title, description, priority } = req.body;
@@ -32,7 +32,7 @@ router.post("/", authMiddleware, async (req, res) => {
 });
 
 
-// ✅ Get All Tasks for Logged-in User
+// Get All Tasks for Logged-in User
 router.get("/", authMiddleware, async (req, res) => {
   try {
     const tasks = await Task.find({ user: new mongoose.Types.ObjectId(req.user.userId) });
@@ -42,7 +42,7 @@ router.get("/", authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ DELETE a Task
+// DELETE a Task
 router.delete("/:id", authMiddleware, async (req, res) => {
   try {
     const { id } = req.params;
@@ -61,7 +61,7 @@ router.delete("/:id", authMiddleware, async (req, res) => {
   }
 });
 
-// ✅ Toggle Task Completion
+//  Toggle Task Completion
 router.patch("/:id/toggle-complete", authMiddleware, async (req, res) => {
   try {
       const { id } = req.params;
@@ -85,6 +85,7 @@ router.patch("/:id/toggle-complete", authMiddleware, async (req, res) => {
 });
 
 
+// Task priority
 router.patch("/:taskId/priority", authMiddleware, async (req, res) => {
   try {
       const { priority } = req.body;
@@ -108,7 +109,15 @@ router.patch("/:taskId/priority", authMiddleware, async (req, res) => {
 });
 
 
-
-
+router.post("/group", authMiddleware, async (req, res) => {
+  try {
+    const { name, description } = req.body;
+    const group = new TaskGroup({ name, description });
+    await group.save();
+    res.status(201).json(group);
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+})
 
 module.exports = router;

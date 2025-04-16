@@ -10,6 +10,7 @@ const TaskSchema = new mongoose.Schema({
         default: "Medium"
     },
     user: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    groupId : { type: mongoose.Schema.Types.ObjectId, ref: "TaskGroup" },
 }, { timestamps: true });
 
 module.exports = mongoose.model("Task", TaskSchema);
