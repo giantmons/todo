@@ -24,6 +24,7 @@ import Lottie from "react-lottie";
 import notebookLottie from "../assets/lottie/notebook.json"
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/appSidebar";
+import emptyList from "@/assets/lottie/empty-list.json"
 
 
 export default function Dashboard() {
@@ -35,6 +36,8 @@ export default function Dashboard() {
   const user = useUserInfo();
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
+  const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
+
 
   const [formData, setFormData] = useState({
     title: "",
@@ -66,7 +69,6 @@ export default function Dashboard() {
 
   // Filtering tasks based on the selected filter
   const filteredTasks = tasks.filter((task) => {
-    // Check status filter
     const statusMatch =
       statusFilter === "all"
         ? true
@@ -74,15 +76,24 @@ export default function Dashboard() {
           ? task.completed === true
           : task.completed === false;
 
-    // Check priority filter (converting both to lowercase for consistency)
     const priorityMatch =
       priorityFilter === "all"
         ? true
         : task.priority.toLowerCase() === priorityFilter.toLowerCase();
 
-    // Only include tasks that match both criteria
-    return statusMatch && priorityMatch;
+    const groupMatch =
+      selectedGroup === null || selectedGroup === "all"
+        ? true
+        : task.groupId?.title === selectedGroup;
+
+
+    return statusMatch && priorityMatch && groupMatch;
   });
+
+  const empty = {
+    animationData: emptyList,
+    loop: false,
+  }
 
   const notebook = {
     animationData: notebookLottie,
@@ -91,125 +102,127 @@ export default function Dashboard() {
 
   return (
     <SidebarProvider>
-      <AppSidebar />
+      <AppSidebar onSelectGroup={(groupId) => setSelectedGroup(groupId)} />
       <SidebarInset>
 
 
-      <div className="font-poppins bg-[#f4f4f4] min-h-screen lg:overflow-y-auto overflow-x-hidden">
-        <Toaster richColors closeButton />
-        <SidebarTrigger className="w-[50px] h-[50px] cursor-pointer hover:bg-blue-100 transition rounded-2xl" />
-
-        <div className="mx-4 lg:mx-[10%]">
-          <div>
-            <h1 className="text-2xl font-semibold">Welcome back, {user.username}!</h1>
-            <p className="text-gray-500">{date}</p>
-          </div>
-
-          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger className="z-10 fixed left-1/2 -translate-x-1/2 bottom-5 h-12 rounded-3xl w-[80%] lg:w-[30%] bg-black hover:scale-105 transition cursor-pointer flex justify-center items-center text-white">
-              Create new Task
-            </DialogTrigger>
-            <DialogContent className="bg-white">
-              <DialogHeader>
-
-                <DialogDescription>
-                  <div className="h-[150px]">
-                    <Lottie options={notebook} />
-                  </div>
-                  <form onSubmit={handleSubmit} className="flex flex-col gap-3 font-poppins">
-                    <input
-                      type="text"
-                      name="title"
-                      placeholder="Title"
-                      onChange={handleChange}
-                      required
-                      className="p-2 border rounded-sm border-gray-300"
-                    />
-                    <input
-                      name="description"
-                      placeholder="#DoItToday!"
-                      onChange={handleChange}
-                      className="p-2 border rounded-sm border-gray-300"
-                    />
-                    {/* Use the custom Select component to update priority */}
-                    <Select onValueChange={handlePriorityChange} required >
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select task Priority" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-white">
-                        <SelectItem value="Low">Low</SelectItem>
-                        <SelectItem value="Medium">Medium</SelectItem>
-                        <SelectItem value="High">High</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <button
-                      type="submit"
-                      className="font-poppins text-white rounded-xl bg-black p-3 hover:scale-95 transition cursor-pointer"
-                    >
-                      Submit
-                    </button>
-                  </form>
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-
-          <div className="mt-10">
-            {/* <div className="absolute">
-            <Lottie options={options}></Lottie>
-          </div> */}
-            <div className="flex justify-end gap-2 items-center p-4 w-full h-24 rounded-5xl mb-4 shadow-md rounded-xl bg-[#2f2b43]">
+        <div className="font-poppins bg-[#f4f4f4] min-h-screen lg:overflow-y-auto overflow-x-hidden">
+          <Toaster richColors closeButton />
 
 
-
-
-              {/* Filter buttons */}
-              <Select onValueChange={(value) => setStatusFilter(value)}>
-                <SelectTrigger className="bg-white min-w-[150px]">
-                  <SelectValue placeholder="Status"></SelectValue>
-                </SelectTrigger>
-                <SelectContent className="bg-white font-poppins">
-                  <SelectItem className="hover:bg-[#2f2b43] hover:text-white transition" value="all">All</SelectItem>
-                  <SelectItem className="hover:bg-[#2f2b43] hover:text-white transition" value="completed">Completed</SelectItem>
-                  <SelectItem className="hover:bg-[#2f2b43] hover:text-white transition" value="pending">Pending</SelectItem>
-                </SelectContent>
-              </Select>
-
-              <Select onValueChange={(value) => setPriorityFilter(value)}>
-                <SelectTrigger className="bg-white min-w-[150px]">
-                  <SelectValue placeholder="Priority"></SelectValue>
-                </SelectTrigger>
-                <SelectContent className="bg-white font-poppins">
-                  <SelectItem className="hover:bg-[#2f2b43] hover:text-white transition" value="all">All</SelectItem>
-                  <SelectItem className="hover:bg-[#2f2b43] hover:text-white transition" value="low">Low</SelectItem>
-                  <SelectItem className="hover:bg-[#2f2b43] hover:text-white transition" value="medium">Medium</SelectItem>
-                  <SelectItem className="hover:bg-[#2f2b43] hover:text-white transition" value="high">High</SelectItem>
-                </SelectContent>
-              </Select>
+          <div className="mx-4 lg:mx-[10%]">
+            <div>
+              <h1 className="text-2xl font-semibold mt-10">Welcome back, {user.username}!</h1>
+              <p className="text-gray-500">{date}</p>
             </div>
 
-            {/* <ScrollArea className="h-[500px] w-full overflow-y-auto"> */}
-            <AnimatePresence>
-              {filteredTasks.length > 0 ? (
-                filteredTasks.slice().reverse().map((task) => (
-                  <motion.div
-                    key={task._id}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <TaskItem task={task} onTaskUpdated={handleTaskUpdate} />
-                  </motion.div>
-                ))
-              ) : (
-                <p>No tasks found</p>
-              )}
-            </AnimatePresence>
-            {/* </ScrollArea> */}
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+              <DialogTrigger className="z-10 fixed left-1/2 -translate-x-1/2 bottom-5 h-12 rounded-3xl w-[80%] lg:w-[30%] bg-black hover:scale-105 transition cursor-pointer flex justify-center items-center text-white">
+                Create new Task
+              </DialogTrigger>
+              <DialogContent className="bg-white">
+                <DialogHeader>
+
+                  <DialogDescription>
+                    <div className="h-[150px]">
+                      <Lottie options={notebook} />
+                    </div>
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-3 font-poppins">
+                      <input
+                        type="text"
+                        name="title"
+                        placeholder="Title"
+                        onChange={handleChange}
+                        required
+                        className="p-2 border rounded-sm border-gray-300"
+                      />
+                      <input
+                        name="description"
+                        placeholder="#DoItToday!"
+                        onChange={handleChange}
+                        className="p-2 border rounded-sm border-gray-300"
+                      />
+                      {/* Use the custom Select component to update priority */}
+                      <Select onValueChange={handlePriorityChange} required >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select task Priority" />
+                        </SelectTrigger>
+                        <SelectContent className="bg-white">
+                          <SelectItem value="Low">Low</SelectItem>
+                          <SelectItem value="Medium">Medium</SelectItem>
+                          <SelectItem value="High">High</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <button
+                        type="submit"
+                        className="font-poppins text-white rounded-xl bg-black p-3 hover:scale-95 transition cursor-pointer"
+                      >
+                        Submit
+                      </button>
+                    </form>
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
+
+            <div className="mt-10">
+              <div className="flex justify-between gap-2 items-center p-4 w-full h-24 rounded-5xl mb-4 shadow-md rounded-xl bg-[#2f2b43]">
+                <SidebarTrigger className=" cursor-pointer hover:bg-blue-100 transition rounded-2xl" />
+                <div className="flex gap-2">
+                  {/* Filter buttons */}
+                  <Select onValueChange={(value) => setStatusFilter(value)}>
+                    <SelectTrigger className="bg-white min-w-[150px]">
+                      <SelectValue placeholder="Status"></SelectValue>
+                    </SelectTrigger>
+                    <SelectContent className="bg-white font-poppins">
+                      <SelectItem className="hover:bg-[#2f2b43] hover:text-white transition" value="all">All</SelectItem>
+                      <SelectItem className="hover:bg-[#2f2b43] hover:text-white transition" value="completed">Completed</SelectItem>
+                      <SelectItem className="hover:bg-[#2f2b43] hover:text-white transition" value="pending">Pending</SelectItem>
+                    </SelectContent>
+                  </Select>
+
+                  <Select onValueChange={(value) => setPriorityFilter(value)}>
+                    <SelectTrigger className="bg-white min-w-[150px]">
+                      <SelectValue placeholder="Priority"></SelectValue>
+                    </SelectTrigger>
+                    <SelectContent className="bg-white font-poppins">
+                      <SelectItem className="hover:bg-[#2f2b43] hover:text-white transition" value="all">All</SelectItem>
+                      <SelectItem className="hover:bg-[#2f2b43] hover:text-white transition" value="low">Low</SelectItem>
+                      <SelectItem className="hover:bg-[#2f2b43] hover:text-white transition" value="medium">Medium</SelectItem>
+                      <SelectItem className="hover:bg-[#2f2b43] hover:text-white transition" value="high">High</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+              </div>
+
+              {/* <ScrollArea className="h-[500px] w-full overflow-y-auto"> */}
+              <AnimatePresence>
+                {filteredTasks.length > 0 ? (
+                  filteredTasks.slice().reverse().map((task) => (
+                    <motion.div
+                      key={task._id}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <TaskItem task={task} onTaskUpdated={handleTaskUpdate} />
+                    </motion.div>
+                  ))
+                ) : (
+                  <div className="w-full h-auto flex justify-center items-center">
+                    <div className="w-[200px]">
+                      <Lottie options={empty} />
+                      <p className="text-center">List is Empty...</p>
+                    </div>
+                  </div>
+                )}
+              </AnimatePresence>
+              {/* </ScrollArea> */}
+            </div>
           </div>
         </div>
-      </div>
       </SidebarInset>
     </SidebarProvider>
 

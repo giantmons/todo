@@ -13,7 +13,6 @@ import { Badge } from "./ui/badge";
 import Lottie from "react-lottie";
 import trashLottie from "../assets/lottie/trash-lottie.json"
 
-
 // Define Task interface with uppercase "T"
 interface Task {
     _id: string;
@@ -21,6 +20,12 @@ interface Task {
     description: string;
     completed: boolean;
     priority: string;
+    groupId: taskGroup;
+}
+
+interface taskGroup {
+    title: string,
+    description: string
 }
 
 interface TaskItemProps {
@@ -73,6 +78,9 @@ export default function TaskItem({ task, onTaskUpdated }: TaskItemProps) {
                 <h3 className={`text-xs xl:text-sm ${isCompleted ? "line-through" : ""}`}>{task.title}</h3>
                 {task.description &&
                     <Badge variant={"hashtag"}> <span className="text-[#2f2b43] text-xs"># {task.description}</span></Badge>
+                }
+                {task.groupId  &&
+                    <p>{task.groupId.title}</p>
                 }
             </div>
 

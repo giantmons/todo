@@ -1,4 +1,6 @@
+import { Description } from "@radix-ui/react-dialog";
 import axios from "axios";
+import { title } from "process";
 
 /* const LOCALSERVER = "https://todo-jnyl.onrender.com/api"; */
 const LOCALSERVER = "http://localhost:5003/api"
@@ -101,3 +103,47 @@ export const updateTaskPriority = async (taskId: string, priority: string, acces
         return null;
     }
 };
+
+//GET TASK GROUP
+export const getTaskGroup = async (access: string) => {
+    try {
+        const response = await axios.get(
+            `${LOCALSERVER}/tasks/group`,
+            {
+                headers: {
+                    "Authorization" : `Bearer ${access}`,
+                    "Content-Type" : "application/json"
+                }
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error("Error fetching task group:", error)
+        return null;
+    }
+}
+
+export const addTaskGroup = async (title: string, description: string, access: string) => {
+    
+    try {
+        const response = await axios.post(
+            `${LOCALSERVER}/tasks/group`,
+            {
+                title,
+                description
+            },
+            {
+                headers: {
+                    "Authorization" : `bearer ${access}`,
+                    "Content-Type" : "application/json"
+                }
+            }
+        );
+        return response.data
+    } catch (error) {
+        console.error("Error posting task group", error);
+        return null;
+    }
+
+    return
+}
