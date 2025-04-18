@@ -68,7 +68,7 @@ export default function TaskItem({ task, onTaskUpdated }: TaskItemProps) {
     }
 
     return (
-        <Card className={`flex flex-row flex-wrap mb-3 justify-between items-center px-6 bg-white border-3 border-transparent ${isCompleted ? "border-dashed border-3 border-amber-300 bg-amber-50" : ""}`}>
+        <Card className={`flex flex-row bg-white flex-wrap mb-3 justify-between items-center px-6  border border-gray-200 ${isCompleted ? "border-dashed border border-amber-300 bg-amber-50" : ""}`}>
             <div className="flex gap-4 items-center">
                 <button onClick={() => { handleToggleClick(); }}>
                     <div className={`border rounded-md border-gray-200 p-2 cursor-pointer transition ${isCompleted ? "bg-amber-300 hover:bg-amber-600 text-white" : "hover:bg-black hover:text-white"}`}>

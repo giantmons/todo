@@ -144,7 +144,7 @@ export default function Dashboard() {
       <SidebarInset>
 
 
-        <div className="font-poppins bg-[#f4f4f4] min-h-screen lg:overflow-y-auto overflow-x-hidden">
+        <div className="font-poppins bg-gray-100 min-h-screen lg:overflow-y-auto overflow-x-hidden">
           <Toaster richColors closeButton />
 
 
@@ -270,7 +270,7 @@ export default function Dashboard() {
                       if (tasksOnDate.length === 0) return null; // Skip empty groups
 
                       return (
-                        <div key={date} className="mb-8 bg-[#EAE9EC] rounded-lg p-5 shadow-sm">
+                        <div key={date} className="mb-8 bg-white rounded-lg p-5 shadow-sm">
                           <h2 className="text-lg font-semibold font-poppins mb-2">{date}</h2>
                           {tasksOnDate.slice().reverse().map(task => (
                             <motion.div
