@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
-import { Trash2Icon, CheckCircle2Icon, EllipsisVerticalIcon } from "lucide-react";
+import { Trash2Icon, CheckCircle2Icon, EllipsisVerticalIcon, Tags } from "lucide-react";
 import { useMarkTaskComplete } from "@/hooks/dashboard/useMarkTaskComplete";
 import { useDeleteTask } from "@/hooks/dashboard/useDeleteTask";
 import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "./ui/dialog";
@@ -80,7 +80,7 @@ export default function TaskItem({ task, onTaskUpdated }: TaskItemProps) {
                     <Badge variant={"hashtag"}> <span className="text-[#2f2b43] text-xs"># {task.description}</span></Badge>
                 }
                 {task.groupId  &&
-                    <p>{task.groupId.title}</p>
+                    <div className="flex text-blue-500 gap-2 text-sm items-center"><Tags size={23}/><p>{task.groupId.title}</p></div>
                 }
             </div>
 

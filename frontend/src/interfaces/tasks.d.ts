@@ -4,6 +4,7 @@ interface task {
     description: string,
     completed: boolean,
     priority: string,
-    groupId: taskGroup
+    groupId: taskGroup,
+    createdAt: string;
 }
 

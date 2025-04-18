@@ -3,15 +3,13 @@ import {
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
-  SidebarGroupAction,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import useAddTaskGroup from "@/hooks/dashboard/useAddTaskGroup";
 import useGetTaskGroup from "@/hooks/dashboard/useGetTaskGroup";
-import { Plus, PlusIcon } from "lucide-react";
+import { PlusIcon } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTrigger } from "./ui/dialog";
 import { useNavigate } from "react-router-dom";
@@ -69,12 +67,6 @@ export function AppSidebar({ onSelectGroup }: AppSidebarProps) {
     <Sidebar className="border-none shadow-md z-20">
       <SidebarContent className="mx-3">
         <SidebarGroup>
-          <SidebarGroupLabel>Task Groups</SidebarGroupLabel>
-          <SidebarGroupAction title="Add Task">
-            <div className="cursor-pointer hover:text-white hover:bg-black transition rounded-sm">
-              <Plus size={16} />
-            </div>
-          </SidebarGroupAction>
           <SidebarGroupContent>
             <div className="flex justify-center items-center my-3">
               <div className="bg-red-300 h-32 w-32 rounded-full">

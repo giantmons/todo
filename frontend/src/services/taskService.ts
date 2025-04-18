@@ -1,6 +1,4 @@
-import { Description } from "@radix-ui/react-dialog";
 import axios from "axios";
-import { title } from "process";
 
 /* const LOCALSERVER = "https://todo-jnyl.onrender.com/api"; */
 const LOCALSERVER = "http://localhost:5003/api"
@@ -26,14 +24,15 @@ export const getTasks = async (access: string): Promise<any> => {
 
 
 //ADD TASK
-export const addTask = async (title: string, description: string, priority: string ,access: string) => {
+export const addTask = async (title: string, description: string, priority: string, groupId: string ,access: string) => {
     try {
         const response = await axios.post(
             `${LOCALSERVER}/tasks/`,
             {
                 title,
                 description,
-                priority
+                priority,
+                groupId
             },
             {
                headers: {
@@ -145,5 +144,23 @@ export const addTaskGroup = async (title: string, description: string, access: s
         return null;
     }
 
-    return
+}
+
+export const deleteTaskGroup = async (taskGroupId: string, access: string) => {
+
+    try {
+        const response = await axios.delete(
+        `${LOCALSERVER}/tasks/group/${taskGroupId}`,
+        {
+            headers: {
+                "Authorization" : `bearer ${access}`,
+                "Content-Type" : "application/json"
+            }
+        }
+        )
+        return response.data
+    } catch (error) {
+        console.error("Error deleting task group: ", error);
+        return null;
+    }
 }
