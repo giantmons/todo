@@ -41,7 +41,7 @@ export default function Dashboard() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [priorityFilter, setPriorityFilter] = useState("all");
   const [selectedGroup, setSelectedGroup] = useState<string | null>(null);
-  const taskGroup = useGetTaskGroup();
+  const taskGroup = useGetTaskGroup(refreshTrigger);
 
 
   const [formData, setFormData] = useState({
@@ -99,9 +99,11 @@ export default function Dashboard() {
   };
 
 
-  const handleTaskUpdate = () => {
-    setRefreshTrigger((prev) => !prev);
-  };
+// In Dashboard.tsx
+const handleTaskUpdate = () => {
+  console.log("Task update triggered"); // Add this for debugging
+  setRefreshTrigger(prev => !prev);
+};
 
   // Filtering tasks based on the selected filter
   const filteredTasks = tasks.filter((task) => {
@@ -140,7 +142,7 @@ export default function Dashboard() {
 
   return (
     <SidebarProvider>
-      <AppSidebar onSelectGroup={(groupId) => setSelectedGroup(groupId)} />
+      <AppSidebar onTaskUpdated={handleTaskUpdate} onSelectGroup={(groupId) => setSelectedGroup(groupId)} />
       <SidebarInset>
 
 

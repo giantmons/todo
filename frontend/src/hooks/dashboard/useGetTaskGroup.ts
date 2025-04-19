@@ -1,7 +1,7 @@
 import { getTaskGroup } from "@/services/taskService"
 import { useEffect, useState } from "react"
 
-const useGetTaskGroup = () => {
+const useGetTaskGroup = (refreshTrigger: boolean) => {
     const [taskGroupData, setTaskGroupData] = useState<taskGroup[] | null>()
     
     useEffect(() => {
@@ -20,7 +20,7 @@ const useGetTaskGroup = () => {
         }
 
         handleFetch()
-    }, [])
+    }, [refreshTrigger])
     
     return taskGroupData
 }

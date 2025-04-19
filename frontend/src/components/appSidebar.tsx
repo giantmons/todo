@@ -9,21 +9,27 @@ import {
 } from "@/components/ui/sidebar";
 import useAddTaskGroup from "@/hooks/dashboard/useAddTaskGroup";
 import useGetTaskGroup from "@/hooks/dashboard/useGetTaskGroup";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTrigger } from "./ui/dialog";
 import { useNavigate } from "react-router-dom";
 import logout from "@/assets/lottie/logout.json"
 import Lottie from "react-lottie";
+import useDeleteTaskGroup from "@/hooks/dashboard/useDeleteTaskGroup";
+
 
 interface AppSidebarProps {
   onSelectGroup: (group: string) => void;
+  onTaskUpdated: () => void; 
 }
 
-export function AppSidebar({ onSelectGroup }: AppSidebarProps) {
-  const taskGroup = useGetTaskGroup();
+
+export function AppSidebar({ onSelectGroup, onTaskUpdated }: AppSidebarProps) {
+  const [refreshTrigger, setRefreshTrigger] = useState(false); 
+  const taskGroup = useGetTaskGroup(refreshTrigger);
   const addTaskGroup = useAddTaskGroup();
   const [selectedGroup, setSelectedGroup] = useState("all");
+  const { handleDeleteTaskGroup } = useDeleteTaskGroup();
   const [formData, setFormData] = useState({
     title: "",
     description: ""
@@ -38,8 +44,11 @@ export function AppSidebar({ onSelectGroup }: AppSidebarProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!addTaskGroup) return
-
+  
     await addTaskGroup.handleAddTaskGroup(formData.title, formData.description)
+    setFormData({ title: "", description: "" }); // Reset form
+    setRefreshTrigger(prev => !prev);
+    onTaskUpdated(); // Make sure this is being called
   }
 
   const handleSelectGroup = (group: string) => {
@@ -61,6 +70,12 @@ export function AppSidebar({ onSelectGroup }: AppSidebarProps) {
   const handleLogOut = () => {
     localStorage.clear()
     navigate("/")
+  }
+
+  const handleDeleteClick = async (id: string) => {
+    await handleDeleteTaskGroup(id);
+    setRefreshTrigger(prev => !prev);
+    onTaskUpdated(); // Make sure this is being called
   }
 
   return (
@@ -113,6 +128,7 @@ export function AppSidebar({ onSelectGroup }: AppSidebarProps) {
                       onClick={() => handleSelectGroup(task.title)}
                       className={getButtonClass(task.title)}
                     >
+                      {selectedGroup === task.title ? <button className="absolute left-3 cursor-pointer hover:text-blue-300" onClick={() => handleDeleteClick(task._id)}><Trash2 size={18}/></button> : ""}
                       {task.title}
                     </button>
                   ))}
