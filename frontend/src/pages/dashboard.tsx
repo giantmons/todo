@@ -27,7 +27,6 @@ import { AppSidebar } from "@/components/appSidebar";
 import emptyList from "@/assets/lottie/empty-list.json"
 import useGetTaskGroup from "@/hooks/dashboard/useGetTaskGroup";
 import { groupTasksByDate } from "@/utils/groupTaskByDate";
-import Magnet from "@/components/ui/magnet";
 import { Plus } from "lucide-react";
 
 
@@ -160,16 +159,14 @@ const handleTaskUpdate = () => {
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger>
                   <div>
-                    <Magnet padding={100} disabled={false} magnetStrength={5}>
                       <motion.button
                         className="flex items-center text-white justify-center gap-4 border px-5 py-3 bg-[#2f2b43] cursor-pointer rounded-lg hover:bg-[#095146]"
-                        animate={{ scale: [1, 1.04, 1] }}
+                        animate={{ scale: [1, 1.02, 1] }}
                         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                       >
                         <Plus />
                         <span>Create new Task</span>
                       </motion.button>
-                    </Magnet>
                   </div>
                 </DialogTrigger>
                 <DialogContent className="bg-white">
