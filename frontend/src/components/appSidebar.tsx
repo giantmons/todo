@@ -16,16 +16,16 @@ import { useNavigate } from "react-router-dom";
 import logout from "@/assets/lottie/logout.json"
 import Lottie from "react-lottie";
 import useDeleteTaskGroup from "@/hooks/dashboard/useDeleteTaskGroup";
-
+import owlDp from "@/assets/owl-profile.png"
 
 interface AppSidebarProps {
   onSelectGroup: (group: string) => void;
-  onTaskUpdated: () => void; 
+  onTaskUpdated: () => void;
 }
 
 
 export function AppSidebar({ onSelectGroup, onTaskUpdated }: AppSidebarProps) {
-  const [refreshTrigger, setRefreshTrigger] = useState(false); 
+  const [refreshTrigger, setRefreshTrigger] = useState(false);
   const taskGroup = useGetTaskGroup(refreshTrigger);
   const addTaskGroup = useAddTaskGroup();
   const [selectedGroup, setSelectedGroup] = useState("all");
@@ -44,7 +44,7 @@ export function AppSidebar({ onSelectGroup, onTaskUpdated }: AppSidebarProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!addTaskGroup) return
-  
+
     await addTaskGroup.handleAddTaskGroup(formData.title, formData.description)
     setFormData({ title: "", description: "" }); // Reset form
     setRefreshTrigger(prev => !prev);
@@ -67,6 +67,7 @@ export function AppSidebar({ onSelectGroup, onTaskUpdated }: AppSidebarProps) {
     loop: false,
   }
 
+
   const handleLogOut = () => {
     localStorage.clear()
     navigate("/")
@@ -84,8 +85,8 @@ export function AppSidebar({ onSelectGroup, onTaskUpdated }: AppSidebarProps) {
         <SidebarGroup>
           <SidebarGroupContent>
             <div className="flex justify-center items-center my-3">
-              <div className="bg-red-300 h-32 w-32 rounded-full">
-
+              <div className="bg-red-300 h-32 w-32 rounded-full flex justify-center items-center">
+                  <img src={owlDp} alt="owl-picture" className="w-[80px]" />
               </div>
             </div>
 
@@ -101,6 +102,9 @@ export function AppSidebar({ onSelectGroup, onTaskUpdated }: AppSidebarProps) {
                     </DialogTrigger>
                     <DialogContent className="bg-white">
                       <form onSubmit={handleSubmit} className="flex flex-col gap-2 text-sm">
+                        <div className="text-lg text-center font-poppins mb-3">
+                          <p>Add Task Group</p>
+                        </div>
                         <input type="text" name="title" onChange={handleFormChange} placeholder="Group Name" className="p-2 border rounded-sm border-gray-300 w-full" />
                         <textarea name="description" onChange={handleFormChange} className="p-2 border rounded-sm border-gray-300 w-full h-20" />
                         <button
@@ -128,7 +132,7 @@ export function AppSidebar({ onSelectGroup, onTaskUpdated }: AppSidebarProps) {
                       onClick={() => handleSelectGroup(task.title)}
                       className={getButtonClass(task.title)}
                     >
-                      {selectedGroup === task.title ? <button className="absolute left-3 cursor-pointer hover:text-blue-300" onClick={() => handleDeleteClick(task._id)}><Trash2 size={18}/></button> : ""}
+                      {selectedGroup === task.title ? <button className="absolute left-3 cursor-pointer hover:text-blue-300" onClick={() => handleDeleteClick(task._id)}><Trash2 size={18} /></button> : ""}
                       {task.title}
                     </button>
                   ))}
@@ -157,7 +161,7 @@ export function AppSidebar({ onSelectGroup, onTaskUpdated }: AppSidebarProps) {
                 <DialogClose className="flex-1">
                   <button className="border p-2 w-full rounded-sm cursor-pointer hover:bg-[#2f2b43] hover:text-white transition">Close</button>
                 </DialogClose>
-                <button onClick={handleLogOut} className="border p-2 flex-1 rounded-sm bg-[#2f2b43] text-white border hover:bg-[#16141F] cursor-pointer transition">Log out</button>
+                <button onClick={handleLogOut} className=" p-2 flex-1 rounded-sm bg-[#2f2b43] text-white border hover:bg-[#16141F] cursor-pointer transition">Log out</button>
               </div>
             </DialogContent>
           </Dialog>

@@ -151,23 +151,23 @@ const handleTaskUpdate = () => {
 
 
           <div className="mx-4 lg:mx-[10%]">
-            <div className="flex justify-between items-center">
+            <div className="flex  flex-col sm:flex-row justify-between items-center">
               <div>
                 <h1 className="text-4xl font-bold mt-10">Welcome, <span className="text-[#9782f5] font-chonburi">{user.username}!</span></h1>
-                <p className="text-gray-500">{date}</p>
+                <p className="text-gray-500 mb-3 sm:mt-0">{date}</p>
               </div>
 
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger>
-                  <div className="flex">
+                  <div>
                     <Magnet padding={100} disabled={false} magnetStrength={5}>
                       <motion.button
-                        className="flex items-center justify-center gap-4 border px-5 py-3 bg-[#2f2b43] cursor-pointer rounded-lg hover:bg-[#095146]"
+                        className="flex items-center text-white justify-center gap-4 border px-5 py-3 bg-[#2f2b43] cursor-pointer rounded-lg hover:bg-[#095146]"
                         animate={{ scale: [1, 1.04, 1] }}
                         transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                       >
-                        <Plus className="text-white" />
-                        <span className="text-white">Create new Task</span>
+                        <Plus />
+                        <span>Create new Task</span>
                       </motion.button>
                     </Magnet>
                   </div>
@@ -238,7 +238,7 @@ const handleTaskUpdate = () => {
                 <div className="flex gap-2">
                   {/* Filter buttons */}
                   <Select onValueChange={(value) => setStatusFilter(value)}>
-                    <SelectTrigger className="bg-white min-w-[150px]">
+                    <SelectTrigger className="bg-white">
                       <SelectValue placeholder="Status"></SelectValue>
                     </SelectTrigger>
                     <SelectContent className="bg-white font-poppins">
@@ -249,7 +249,7 @@ const handleTaskUpdate = () => {
                   </Select>
 
                   <Select onValueChange={(value) => setPriorityFilter(value)}>
-                    <SelectTrigger className="bg-white min-w-[150px]">
+                    <SelectTrigger className="bg-white">
                       <SelectValue placeholder="Priority"></SelectValue>
                     </SelectTrigger>
                     <SelectContent className="bg-white font-poppins">

@@ -22,7 +22,7 @@ const badgeVariants = cva(
         high:
           "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground bg-red-500 text-white",
         hashtag:
-          "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground bg-gray-200 text-white",
+          "text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground bg-gray-200 text-white hidden md:flex",
       },
     },
     defaultVariants: {

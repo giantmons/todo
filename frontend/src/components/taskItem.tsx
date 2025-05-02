@@ -77,10 +77,10 @@ export default function TaskItem({ task, onTaskUpdated }: TaskItemProps) {
                 </button>
                 <h3 className={`text-xs xl:text-sm ${isCompleted ? "line-through" : ""}`}>{task.title}</h3>
                 {task.description &&
-                    <Badge variant={"hashtag"}> <span className="text-[#2f2b43] text-xs"># {task.description}</span></Badge>
+                    <Badge variant={"hashtag"}> <span className="text-[#2f2b43] text-xs hidden md:flex"># {task.description}</span></Badge>
                 }
                 {task.groupId  &&
-                    <div className="flex text-blue-500 gap-2 text-sm items-center"><Tags size={23}/><p>{task.groupId.title}</p></div>
+                    <div className="md:flex hidden text-blue-500 gap-2 text-sm items-center"><Tags size={23}/><p>{task.groupId.title}</p></div>
                 }
             </div>
 
