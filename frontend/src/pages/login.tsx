@@ -1,6 +1,6 @@
 
 import {
-     CardContent, CardDescription, CardHeader, CardTitle,
+    CardContent, CardDescription, CardHeader, CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom"
 
 export default function LoginPage() {
     const [message, setMessage] = useState("")
+    const [loading, setIsLoading] = useState(false)
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         email: "",
@@ -27,12 +28,14 @@ export default function LoginPage() {
 
         try {
             const { email, password } = formData;
+            setIsLoading(true)
             const data = await loginUser(email, password)
             console.log("Login Successful", data)
             console.log(data?.success)
 
             if (data?.success) {
                 setMessage("Login Successful! Redirecting...");
+                setIsLoading(false)
                 localStorage.setItem("token", data.token);
                 console.log("Token received:", data.token);
                 console.log("Navigating to /dashboard...");
@@ -41,6 +44,7 @@ export default function LoginPage() {
         } catch (error: any) {
             console.error("Login error error:", error);
             setMessage(`❌ Error: ${error.response?.data?.message || "Failed to connect to the server."}`);
+            setIsLoading(false)
         }
 
     }
@@ -85,11 +89,39 @@ export default function LoginPage() {
                                         </div>
                                         <Input className="placeholder:text-gray-400 bg-white text-black" id="password" placeholder="Enter your password" name="password" type="password" onChange={handleChange} required />
                                     </div>
-                                    <motion.button initial={{ opacity: 0, y: 50 }}
+                                    <motion.button
+                                        initial={{ opacity: 0, y: 50 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        transition={{ duration: 0.8, ease: "easeOut" }} type="submit" className="absolute -bottom-16 p-4 rounded-xl left-0 w-full bg-black text-white cursor-pointer">
-                                        Login
+                                        transition={{ duration: 0.8, ease: "easeOut" }}
+                                        type="submit"
+                                        disabled={loading}
+                                        className="absolute -bottom-16 p-4 rounded-xl left-0 w-full bg-black text-white cursor-pointer flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
+                                    >
+                                        {loading && (
+                                            <svg
+                                                className="animate-spin h-5 w-5 text-white"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <circle
+                                                    className="opacity-25"
+                                                    cx="12"
+                                                    cy="12"
+                                                    r="10"
+                                                    stroke="currentColor"
+                                                    strokeWidth="4"
+                                                ></circle>
+                                                <path
+                                                    className="opacity-75"
+                                                    fill="currentColor"
+                                                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                                                ></path>
+                                            </svg>
+                                        )}
+                                        {loading ? 'Loading...' : 'Login'}
                                     </motion.button>
+
                                     {message && <p className="text-sm text-center mt-2">{message}</p>}
                                 </div>
                                 <div className="mt-4 text-center text-sm">

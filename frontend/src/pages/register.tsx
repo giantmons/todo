@@ -8,6 +8,7 @@ import { motion } from "framer-motion"
 
 export default function RegisterPage() {
     const [message, setMessage] = useState("")
+    const [loading, setLoading] = useState(false)
     const [formData, setFormData] = useState({
         username: "",
         email: "",
@@ -22,13 +23,16 @@ export default function RegisterPage() {
 
         try {
             const { username, email, password } = formData;
+            setLoading(true)
             const data = await registerUser(username, email, password)
             console.log("Registration Successful!", data)
 
             if (data?.success) {
                 setMessage("Registration Successful!")
+                setLoading(false)
             } else {
                 setMessage(`❌ Error: ${data?.error || "Something went wrong."}`);
+                setLoading(false)
             }
 
         } catch (error: any) {
@@ -103,10 +107,34 @@ export default function RegisterPage() {
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ duration: 0.8, ease: "easeOut" }}
                                         type="submit"
-                                        className="absolute -bottom-16 p-4 rounded-xl left-0 w-full bg-black text-white cursor-pointer"
+                                        disabled={loading}
+                                        className="absolute -bottom-16 p-4 rounded-xl left-0 w-full bg-black text-white cursor-pointer flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
                                     >
-                                        Submit
+                                        {loading && (
+                                            <svg
+                                                className="animate-spin h-5 w-5 text-white"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <circle
+                                                    className="opacity-25"
+                                                    cx="12"
+                                                    cy="12"
+                                                    r="10"
+                                                    stroke="currentColor"
+                                                    strokeWidth="4"
+                                                ></circle>
+                                                <path
+                                                    className="opacity-75"
+                                                    fill="currentColor"
+                                                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                                                ></path>
+                                            </svg>
+                                        )}
+                                        {loading ? 'Submitting...' : 'Submit'}
                                     </motion.button>
+
                                     {message && <p className="text-sm text-center mt-2">{message}</p>}
                                 </div>
                                 <div className="mt-4 text-center text-sm">
