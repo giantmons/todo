@@ -39,7 +39,7 @@ export default function LoginPage() {
                 navigate("/dashboard");
             }
         } catch (error: any) {
-            console.error("Login error:", error);
+            console.error("Login error error:", error);
             setMessage(`❌ Error: ${error.response?.data?.message || "Failed to connect to the server."}`);
         }
 
